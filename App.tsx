@@ -7,7 +7,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {enableScreens} from 'react-native-screens';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {GalleryContextProvider} from './app/Context/MainGalleryContext';
-enableScreens();
+// enableScreens();
 
 let queryClient = new QueryClient();
 export default function App() {

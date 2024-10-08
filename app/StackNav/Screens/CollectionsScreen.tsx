@@ -7,18 +7,20 @@ import {AssetItem} from 'react-native-media-library2';
 import {getCollectionItems} from '../../api/galleryMethods';
 import {tw} from '../../utils/utils';
 import CollectionMasonCard from '../../components/CollectionMasonCard';
+import {Album} from 'expo-media-library';
+import AppHeader from '../../components/AppHeader';
 
 // Define the type for route parameters
 type RouteParams = {
-  collId: string;
+  item: Album;
 };
 
 export default function CollectionsScreen() {
   const {params} = useRoute<RouteProp<{params: RouteParams}, 'params'>>();
 
   const {data} = useQuery({
-    queryKey: [params.collId],
-    queryFn: async () => await getCollectionItems(params.collId),
+    queryKey: [params.item],
+    queryFn: async () => await getCollectionItems(params.item.id),
   });
   let renderItem = useMemo(() => {
     return ({item, index}: {item: AssetItem; index: number}) => {
@@ -28,7 +30,11 @@ export default function CollectionsScreen() {
   let dmen = useWindowDimensions();
   return (
     <View style={{flex: 1}}>
-      <Text>CollectionsScreen</Text>
+      <View style={tw('justify-between px-2 flex-row py-2')}>
+        <AppHeader />
+        <Text style={tw('text-xl text-neutral-500')}>Collections</Text>
+      </View>
+      <Text style={tw('text-lg px-2')}>{params.item.title}</Text>
       {/* <Text>{params.collId}</Text>
         <Text>{JSON.stringify(data)}</Text> */}
       <FlashList
@@ -36,6 +42,7 @@ export default function CollectionsScreen() {
         renderItem={renderItem}
         estimatedItemSize={dmen.width / 4}
         numColumns={4}
+        contentContainerStyle={tw('px-2')}
       />
     </View>
   );

@@ -13,7 +13,7 @@ export default function StackNav() {
         headerShown: false,
         // freezeOnBlur: true,
         animationDuration: 500,
-        animation: "slide_from_right",
+        animation: "fade_from_bottom",
       }}>
       <Stack.Screen component={TabNav} name="Tab" />
       <Stack.Screen component={MainImageScreen} name="MainImageScreen" />
