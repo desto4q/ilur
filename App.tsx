@@ -1,23 +1,32 @@
-import {View, Text} from 'react-native';
+import {View, Text, PermissionsAndroid} from 'react-native';
 import React, {useEffect} from 'react';
-import Main from './app/Main';
-import {mediaLibrary} from 'react-native-media-library2';
-
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {enableScreens} from 'react-native-screens';
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
-import {GalleryContextProvider} from './app/Context/MainGalleryContext';
-// enableScreens();
-
-let queryClient = new QueryClient();
+import * as MediaLibrary from 'expo-media-library';
+import Intro from './app/Intro';
+import { tw } from './app/utils/utils';
 export default function App() {
+  const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
+
+  async function getPerms() {
+    if (permissionResponse?.status !== 'granted') {
+      await requestPermission();
+    } else {
+      console.log('permissions Granted');
+    }
+  }
+  
+  useEffect(() => {
+    getPerms()
+  }, []);
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <QueryClientProvider client={queryClient} >
-        <GalleryContextProvider >
-          <Main />
-        </GalleryContextProvider>
-      </QueryClientProvider>
-    </GestureHandlerRootView>
+    <View style={{flex: 1}}>
+      {permissionResponse?.granted ? (
+        <Intro />
+      ) : (
+        <View style={tw("flex-1 items-center justify-center gap-2")}>
+          <Text style={tw("text-3xl")}>Ilur</Text>
+          <Text style={tw("text-lg")}>Grant Permmissions</Text>
+        </View>
+      )}
+    </View>
   );
 }

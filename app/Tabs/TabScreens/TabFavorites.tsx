@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function TabVideos() {
+export default function TabFavorites() {
   return (
     <View>
-      <Text>TabVideos</Text>
+      <Text>TabFavorites</Text>
     </View>
   )
 }

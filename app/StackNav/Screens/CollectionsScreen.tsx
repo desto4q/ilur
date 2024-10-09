@@ -35,9 +35,9 @@ export default function CollectionsScreen() {
         <Text style={tw('text-xl text-neutral-500')}>Collections</Text>
       </View>
       <Text style={tw('text-lg px-2')}>{params.item.title}</Text>
-      {/* <Text>{params.collId}</Text>
-        <Text>{JSON.stringify(data)}</Text> */}
+
       <FlashList
+      
         data={data}
         renderItem={renderItem}
         estimatedItemSize={dmen.width / 4}

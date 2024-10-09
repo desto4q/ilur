@@ -1,6 +1,7 @@
 import {useQuery} from '@tanstack/react-query';
 import {
   createContext,
+  LegacyRef,
   PropsWithChildren,
   RefObject,
   useContext,
@@ -9,24 +10,32 @@ import {
   useState,
 } from 'react';
 import {AssetItem, mediaLibrary} from 'react-native-media-library2';
-import {getAll} from '../api/galleryMethods';
+import {generateEmptyObjectFromType, getAll} from '../api/galleryMethods';
+import {VideoRef} from 'react-native-video';
 type IGalleryContext = {
   currentRef: RefObject<number>; // Use number instead of Number
   TabHomeData?: AssetItem[];
+  isFetching: boolean;
+  refetch: () => any;
 };
 
 let GalleryContext = createContext<IGalleryContext | undefined>({
   currentRef: {current: 0},
   TabHomeData: [],
-}); // Set the default to undefined
+  refetch: () => {},
+  isFetching: true,
+});
 let GalleryContextProvider = ({children}: PropsWithChildren) => {
-  let currentRef = useRef<number>(0); // Specify the type as number
-  let {data: TabHomeData} = useQuery({
+  let currentRef = useRef<number>(0);
+  let {
+    data: TabHomeData,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ['tabHome'],
     queryFn: async () => await getAll(),
   });
-
-  let values = {currentRef, TabHomeData};
+  let values = {currentRef, TabHomeData, isFetching, refetch};
 
   return (
     <GalleryContext.Provider value={values}>{children}</GalleryContext.Provider>
