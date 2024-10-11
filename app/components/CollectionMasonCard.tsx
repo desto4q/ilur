@@ -5,7 +5,7 @@ import {
   LayoutChangeEvent,
   Image,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {AssetItem} from 'react-native-media-library2';
 import {colors, tw} from '../utils/utils';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
@@ -13,21 +13,29 @@ import {FasterImageView} from '@candlefinance/faster-image';
 import {useGalleryContext} from '../Context/MainGalleryContext';
 // import {IconPlayerPlay} from '@tabler/icons-react-native';
 import {Camera, Play} from 'lucide-react-native';
-import {useSelectedStore} from '../store/zus';
+import {selectState$, useSelectedStore} from '../store/zus';
+import { observer } from '@legendapp/state/react';
 
 interface AssetItemExtend {
   item: AssetItem;
   index: number;
   data?: AssetItem[];
 }
-export default function CollectionMasonCard({
-  item,
-  index,
-  data,
-}: AssetItemExtend) {
+let CollectionMasonCard=  observer(function CollectionMasonCard({item, index, data}: AssetItemExtend) {
   let navigation: any = useNavigation();
-  const onClick = async () => {
-    if (selectMode.current) {
+
+  let addTo = useSelectedStore(state => state.addToSelected);
+  let remove = useSelectedStore(state => state.removeFromSelected);
+  let [selected, setSelected] = useState(false);
+  let selectMode = selectState$.get();
+  useEffect(() => {
+    if (!selectMode && selected) {
+      setSelected(false);
+    }
+  }, [selectMode, selected]);
+
+  const onClick = useCallback(() => {
+    if (selectMode) {
       selecter();
       return;
     }
@@ -35,35 +43,23 @@ export default function CollectionMasonCard({
       index: index,
       data: data,
     });
-  };
+  }, [selectMode, selected]);
 
-  let addTo = useSelectedStore(state => state.addToSelected);
-  let remove = useSelectedStore(state => state.removeFromSelected);
-  let [selected, setSelected] = useState(false);
-  const isFocused = useIsFocused();
-  let {selectMode, currentRef} = useGalleryContext();
-  useEffect(() => {
-    if (selected) {
-      setSelected(false);
-    }
-  }, [isFocused]);
-
-  const onLongPress = async () => {
+  const onLongPress = useCallback(() => {
+    selectState$.set(true);
     selecter();
-    if (!selectMode.current) {
-      selectMode.current = true;
-    }
-  };
+  }, [selected]);
 
-  let selecter = () => {
+  const selecter = useCallback(() => {
     if (selected) {
       remove(item.id);
-      setSelected(!selected);
-      return;
+      setSelected(false);
+    } else {
+      addTo(item);
+      setSelected(true);
     }
-    addTo(item);
-    setSelected(!selected);
-  };
+  }, [selected, item]);
+
   return (
     <View style={tw('w-full aspect-square  rounded-md p-[2px] relative')}>
       <TouchableOpacity
@@ -106,4 +102,5 @@ export default function CollectionMasonCard({
       </TouchableOpacity>
     </View>
   );
-}
+});
+export default CollectionMasonCard;

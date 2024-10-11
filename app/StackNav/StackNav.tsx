@@ -6,6 +6,7 @@ import MainImageScreen from './Screens/MainImageScreen';
 import CollectionsScreen from './Screens/CollectionsScreen';
 import CollectionImageScreen from './Screens/CollectionImageScreen';
 import MainHeader from '../components/MainHeader';
+import FavoritesScreen from './Screens/FavoritesScreen';
 let Stack = createNativeStackNavigator();
 export default function StackNav() {
   return (
@@ -22,6 +23,7 @@ export default function StackNav() {
         component={CollectionImageScreen}
         name="CollectionImageScreen"
       />
+      <Stack.Screen component={FavoritesScreen} name='FavScreen'/>
     </Stack.Navigator>
   );
 }

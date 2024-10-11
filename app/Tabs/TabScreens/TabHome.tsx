@@ -15,6 +15,7 @@ let renderItem = ({item, index}: {item: AssetItem; index: number}) => {
 export default function TabHome() {
   let {TabHomeData, isFetching, refetch} = useGalleryContext();
   let clear = useSelectedStore(state => state.clear);
+  let {selectMode} = useGalleryContext();
   let isFocused = useIsFocused();
   useEffect(() => {
     clear();

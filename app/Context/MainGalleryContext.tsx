@@ -39,7 +39,7 @@ let GalleryContextProvider = ({children}: PropsWithChildren) => {
     queryKey: ['tabHome'],
     queryFn: async () => await getAll(),
   });
-  let selectMode = useRef(false);
+  let selectMode = useRef<boolean>(false);
 
   let values = {currentRef, TabHomeData, isFetching, refetch, selectMode};
 

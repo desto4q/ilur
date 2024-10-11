@@ -7,17 +7,6 @@ import {useGalleryContext} from './Context/MainGalleryContext';
 export default function Main() {
   const items = useSelectedStore(state => state.selectedItems);
   const {selectMode} = useGalleryContext();
-
-  const resetSelectMode = useCallback(() => {
-    if (Object.keys(items).length < 1) {
-      selectMode.current = false;
-    }
-  }, [items, selectMode]);
-
-  useEffect(() => {
-    resetSelectMode();
-  }, [items, resetSelectMode]);
-
   return (
     <NavigationContainer theme={DarkTheme}>
       <StackNav />

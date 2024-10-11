@@ -1,16 +1,24 @@
 import {View, Text, Touchable, TouchableOpacity} from 'react-native';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 import {colors, tw} from '../utils/utils';
-import {selectModeAtom, selectState$, useSelectedStore} from '../store/zus';
+import {useSelectedStore} from '../store/zus';
 import {useShallow} from 'zustand/shallow';
-import {PlusCircle, X} from 'lucide-react-native';
+import {DeleteIcon, PlusCircle} from 'lucide-react-native';
 import {useModalContext} from '../Context/ModalContext';
-import {useGalleryContext} from '../Context/MainGalleryContext';
-import {observer} from '@legendapp/state/react';
+import {AssetItem} from 'react-native-media-library2';
+import {DeleteFromCol} from '../store/storage';
 
-let MainHeader = observer(function MainHeader({title}: {title?: string}) {
+export default function FavHeader({
+  title,
+  favData,
+  refetch,
+}: {
+  title?: string;
+  favData: AssetItem[];
+  refetch: () => any;
+}) {
   let items = useSelectedStore(useShallow(state => state.selectedItems));
-  let clear = useSelectedStore(state => state.clear);
+  let clear = useSelectedStore(state=>state.clear)
   let count = useMemo(() => {
     return Object.keys(items).length;
   }, [items]);
@@ -18,10 +26,12 @@ let MainHeader = observer(function MainHeader({title}: {title?: string}) {
   let onPress = () => {
     openModal();
   };
-  let selectMode = selectState$.get();
-  let reset = () => {
-    selectState$.set(false)
-    clear();
+  let filter = async () => {
+    let filtered = favData.filter(item => !items[item.id]); // Filter out items whose id exists in selectedItems
+    console.log(filtered);
+    await DeleteFromCol(String(title), filtered);
+    await refetch()
+    clear()
   };
   return (
     <View style={tw('h-14 items-center bg-neutral-900 relative flex-row px-2')}>
@@ -33,26 +43,24 @@ let MainHeader = observer(function MainHeader({title}: {title?: string}) {
           {title}
         </Text>
       ) : null}
-      {selectMode ? (
+      {count > 0 ? (
         <View
           style={tw(
             'absolute left-0 right-0 z-10 bg-neutral-900 h-full flex-row items-center px-2',
           )}>
-          <TouchableOpacity
-            style={tw('p-2 bg-neutral-600 rounded-md mr-2')}
-            onPress={reset}>
-            <X size={16} color={'white'} />
-          </TouchableOpacity>
           <Text style={tw('text-lg')}>Selected:{count}</Text>
           <TouchableOpacity
-            onPress={onPress}
+            onPress={filter}
             style={tw('h-full p-2 items-center justify-center ml-auto')}>
+            <DeleteIcon size={20} color={colors.neutral[200]} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={onPress}
+            style={tw('h-full p-2 items-center justify-center ml-2')}>
             <PlusCircle size={20} color={colors.neutral[200]} />
           </TouchableOpacity>
         </View>
       ) : null}
     </View>
   );
-});
-
-export default MainHeader;
+}

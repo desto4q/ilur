@@ -2,7 +2,7 @@ import {AssetItem} from 'react-native-media-library2';
 import {create} from 'zustand';
 import {observable, observe} from '@legendapp/state';
 import {observer} from '@legendapp/state/react';
-import { atom } from 'jotai';
+import {atom} from 'jotai';
 
 const settings$ = observable({theme: 'dark'});
 
@@ -47,7 +47,6 @@ const useSelectedStore = create<SelectStore>(set => ({
     }),
 }));
 const selectModeAtom = atom(false);
-
 const tempItems = observable<{items: AssetItem[]}>({items: []});
-
-export {useIndexStore, tempItems, useSelectedStore,selectModeAtom};
+let selectState$ = observable(false);
+export {useIndexStore, tempItems, useSelectedStore, selectModeAtom,selectState$};

@@ -38,9 +38,30 @@ let createCollection = async (key: string, item?: AssetItem[]) => {
   let resp = collections.setArray(key, tempItem);
 };
 let updateCollection = async (key: string, data: AssetItem[]) => {
-  let resp = collections.getArray(key);
-  let newArr = [...resp, ...data];
+  // Get the current array from storage
+  let resp = collections.getArray(key) as AssetItem[];
+
+  // Merge the new data with the existing data, removing duplicates by id
+  let newArr = [...resp, ...data].reduce((acc: AssetItem[], item) => {
+    // Check if the item with the same id already exists in the accumulator
+    if (!acc.some(existingItem => existingItem.id === item.id)) {
+      acc.push(item);  // Add only if it's not a duplicate
+    }
+    return acc;
+  }, []);
+
+  // Save the updated array back to storage
   let saved = await collections.setArray(key, newArr);
+
+  return newArr; // Return the updated array
+};
+
+let getCollection = async (key: string): Promise<AssetItem[]> => {
+  let resp: AssetItem[] = collections.getArray(key);
   return resp;
 };
-export {createCollection, getAllCollections, updateCollection};
+let DeleteFromCol = async (key: string, data: AssetItem[]) => {
+  let resp = collections.setArray(key, data);
+  return resp;
+};
+export {createCollection, getAllCollections, updateCollection, getCollection,DeleteFromCol};
