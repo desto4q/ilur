@@ -9,14 +9,12 @@ import TabFavorites from './TabScreens/TabFavorites';
 let Tab = createBottomTabNavigator();
 export default function TabNav() {
   return (
-    <Tab.Navigator tabBar={e => <CustomTabBar {...e} />}>
-      <Tab.Screen
-        component={TabHome}
-        name="TabHome"
-        options={{
-          headerTitle: 'Ilur',
-        }}
-      />
+    <Tab.Navigator
+      tabBar={e => <CustomTabBar {...e} />}
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Tab.Screen component={TabHome} name="TabHome" />
       <Tab.Screen
         component={TabCollection}
         name="TabCol"

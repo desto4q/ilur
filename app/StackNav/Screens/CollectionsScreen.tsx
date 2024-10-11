@@ -9,6 +9,7 @@ import {tw} from '../../utils/utils';
 import CollectionMasonCard from '../../components/CollectionMasonCard';
 import {Album} from 'expo-media-library';
 import AppHeader from '../../components/AppHeader';
+import MainHeader from '../../components/MainHeader';
 
 // Define the type for route parameters
 type RouteParams = {
@@ -30,14 +31,10 @@ export default function CollectionsScreen() {
   let dmen = useWindowDimensions();
   return (
     <View style={{flex: 1}}>
-      <View style={tw('justify-between px-2 flex-row py-2')}>
-        <AppHeader />
-        <Text style={tw('text-xl text-neutral-500')}>Collections</Text>
-      </View>
+      {/* <AppHeader /> */}
+      <MainHeader title={params.item.title} />
       <Text style={tw('text-lg px-2')}>{params.item.title}</Text>
-
       <FlashList
-      
         data={data}
         renderItem={renderItem}
         estimatedItemSize={dmen.width / 4}

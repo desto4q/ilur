@@ -7,6 +7,7 @@ import * as MediaLibrary from 'expo-media-library';
 import {tw} from '../../utils/utils';
 import CollectionCard from '../../components/CollectionCard';
 import {RefreshControl} from 'react-native-gesture-handler';
+import MainHeader from '../../components/MainHeader';
 let dmen = Dimensions.get('window');
 
 let renderItem = ({item}: {item: MediaLibrary.Album}) => {
@@ -20,6 +21,7 @@ export default function TabCollection() {
 
   return (
     <View style={{flex: 1}}>
+      <MainHeader title="Collections" />
       <FlashList
         refreshControl={
           <RefreshControl refreshing={isFetching} onRefresh={refetch} />

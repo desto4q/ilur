@@ -12,11 +12,14 @@ import {
 import {AssetItem, mediaLibrary} from 'react-native-media-library2';
 import {generateEmptyObjectFromType, getAll} from '../api/galleryMethods';
 import {VideoRef} from 'react-native-video';
+import {useShallow} from 'zustand/shallow';
+import {useSelectedStore} from '../store/zus';
 type IGalleryContext = {
   currentRef: RefObject<number>; // Use number instead of Number
   TabHomeData?: AssetItem[];
   isFetching: boolean;
   refetch: () => any;
+  selectMode: RefObject<boolean>;
 };
 
 let GalleryContext = createContext<IGalleryContext | undefined>({
@@ -24,6 +27,7 @@ let GalleryContext = createContext<IGalleryContext | undefined>({
   TabHomeData: [],
   refetch: () => {},
   isFetching: true,
+  selectMode: {current: false},
 });
 let GalleryContextProvider = ({children}: PropsWithChildren) => {
   let currentRef = useRef<number>(0);
@@ -35,7 +39,9 @@ let GalleryContextProvider = ({children}: PropsWithChildren) => {
     queryKey: ['tabHome'],
     queryFn: async () => await getAll(),
   });
-  let values = {currentRef, TabHomeData, isFetching, refetch};
+  let selectMode = useRef(false);
+
+  let values = {currentRef, TabHomeData, isFetching, refetch, selectMode};
 
   return (
     <GalleryContext.Provider value={values}>{children}</GalleryContext.Provider>

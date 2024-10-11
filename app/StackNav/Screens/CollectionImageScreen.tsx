@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, Dimensions} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import {AssetItem} from 'react-native-media-library2';
@@ -6,14 +6,23 @@ import {Carousel} from 'react-native-flash-carousel';
 import CarouselCard from '../../components/CarouselCard';
 import {InteractionManager} from 'react-native';
 import {tw} from '../../utils/utils';
+import {FlashList} from '@shopify/flash-list';
+import VideoCard from '../../components/VideoCard';
+import AppHeader from '../../components/AppHeader';
 
 interface params {
   data: AssetItem[];
   index: number;
 }
+let {width} = Dimensions.get('screen');
 
 let renderItem = ({item}: {item: AssetItem}) => {
-  return <CarouselCard item={item} />;
+  switch (item.mediaType) {
+    case 'video':
+      return <VideoCard item={item} screenWidth={width} />;
+    default:
+      return <CarouselCard item={item} screenWidth={width} />;
+  }
 };
 
 export default function CollectionImageScreen() {
@@ -30,15 +39,18 @@ export default function CollectionImageScreen() {
 
   return (
     <View style={{flex: 1}}>
-      {isTransitionComplete ? (
-        <Carousel
-          data={params.data}
-          renderItem={renderItem}
-          initialScrollIndex={params.index}
-        />
-      ) : (
-        <View style={tw('flex-1 bg-neutral-600')} />
-      )}
+      <FlashList
+        pagingEnabled
+        decelerationRate={'fast'}
+        directionalLockEnabled={true}
+        pinchGestureEnabled={false}
+        data={params.data}
+        renderItem={renderItem}
+        initialScrollIndex={params.index}
+        estimatedItemSize={width}
+        horizontal
+        getItemType={item => item.mediaType}
+      />
     </View>
   );
 }
