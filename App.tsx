@@ -3,6 +3,7 @@ import React, {useEffect} from 'react';
 import * as MediaLibrary from 'expo-media-library';
 import Intro from './app/Intro';
 import {tw} from './app/utils/utils';
+
 export default function App() {
   const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
 

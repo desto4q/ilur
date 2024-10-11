@@ -4,6 +4,7 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import Main from './Main';
 import {GalleryContextProvider} from './Context/MainGalleryContext';
 import {ModalContextProvider} from './Context/ModalContext';
+import {SharedRefProvider} from './Context/SharedRefContext';
 const queryClient = new QueryClient();
 export default function Intro() {
   return (
@@ -11,7 +12,9 @@ export default function Intro() {
       <QueryClientProvider client={queryClient}>
         <GalleryContextProvider>
           <ModalContextProvider>
-            <Main />
+            <SharedRefProvider>
+              <Main />
+            </SharedRefProvider>
           </ModalContextProvider>
         </GalleryContextProvider>
       </QueryClientProvider>

@@ -9,7 +9,7 @@ import TabFavorites from './TabScreens/TabFavorites';
 let Tab = createBottomTabNavigator();
 export default function TabNav() {
   return (
-    <Tab.Navigator
+    <Tab.Navigator  
       tabBar={e => <CustomTabBar {...e} />}
       screenOptions={{
         headerShown: false,

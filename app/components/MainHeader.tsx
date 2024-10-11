@@ -7,6 +7,8 @@ import {PlusCircle, X} from 'lucide-react-native';
 import {useModalContext} from '../Context/ModalContext';
 import {useGalleryContext} from '../Context/MainGalleryContext';
 import {observer} from '@legendapp/state/react';
+import {useSharedRef} from '../Context/SharedRefContext';
+import {useAtomValue, useSetAtom} from 'jotai';
 
 let MainHeader = observer(function MainHeader({title}: {title?: string}) {
   let items = useSelectedStore(useShallow(state => state.selectedItems));
@@ -18,11 +20,17 @@ let MainHeader = observer(function MainHeader({title}: {title?: string}) {
   let onPress = () => {
     openModal();
   };
-  let selectMode = selectState$.get();
-  let reset = () => {
-    selectState$.set(false)
-    clear();
+  let selectMode = useAtomValue(selectModeAtom);
+  let setSelectMode = useSetAtom(selectModeAtom);
+  let sharedVarRef = useSharedRef();
+
+  let reset = async () => {
+    await clear();
+    sharedVarRef.current == false;
+    setSelectMode(false);
   };
+  
+
   return (
     <View style={tw('h-14 items-center bg-neutral-900 relative flex-row px-2')}>
       <Text style={tw('text-xl ')}>Ilur</Text>

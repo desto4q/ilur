@@ -14,14 +14,18 @@ import {useGalleryContext} from '../Context/MainGalleryContext';
 // import {IconPlayerPlay} from '@tabler/icons-react-native';
 import {Camera, Play} from 'lucide-react-native';
 import {selectState$, useSelectedStore} from '../store/zus';
-import { observer } from '@legendapp/state/react';
+import {observer} from '@legendapp/state/react';
 
 interface AssetItemExtend {
   item: AssetItem;
   index: number;
   data?: AssetItem[];
 }
-let CollectionMasonCard=  observer(function CollectionMasonCard({item, index, data}: AssetItemExtend) {
+let CollectionMasonCard = observer(function CollectionMasonCard({
+  item,
+  index,
+  data,
+}: AssetItemExtend) {
   let navigation: any = useNavigation();
 
   let addTo = useSelectedStore(state => state.addToSelected);

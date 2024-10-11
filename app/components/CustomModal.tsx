@@ -128,7 +128,7 @@ const CustomModal = () => {
 };
 let ColCard = ({title}: {title: string}) => {
   let items = useSelectedStore(state => state.selectedItems);
-  let clear = useSelectedStore(state=>state.clear)
+  let clear = useSelectedStore(state => state.clear);
   let {modalizeRef} = useModalContext();
   let onPress = async () => {
     let arr = Object.values(items);
@@ -138,7 +138,7 @@ let ColCard = ({title}: {title: string}) => {
         {
           text: 'Close',
           onPress: () => {
-            clear()
+            clear();
             modalizeRef.current?.close();
             console.log('Close Pressed');
           },

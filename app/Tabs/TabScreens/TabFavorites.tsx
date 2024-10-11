@@ -1,5 +1,5 @@
 import {View, Text, TouchableOpacity, Dimensions} from 'react-native';
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {tw} from '../../utils/utils';
 import {Modalize} from 'react-native-modalize';
 import {useGalleryContext} from '../../Context/MainGalleryContext';
@@ -9,6 +9,7 @@ import {useQuery} from '@tanstack/react-query';
 import {FlashList} from '@shopify/flash-list';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import AppHeader from '../../components/AppHeader';
+import {useSharedRef} from '../../Context/SharedRefContext';
 
 let dmen = Dimensions.get('window');
 let renderItem = ({item}: {item: string}) => {
@@ -32,10 +33,18 @@ export default function TabFavorites() {
       fetchAgain();
     }, []),
   );
+  let sharedVarRef = useSharedRef();
   return (
     <View style={{flex: 1}}>
-      
       <AppHeader />
+      <TouchableOpacity
+        style={tw('p-2 bg-neutral-700')}
+        onPress={() => {
+          let prev = sharedVarRef.current;
+          sharedVarRef.current = !prev;
+        }}>
+        <Text>dum</Text>
+      </TouchableOpacity>
       <FlashList
         data={data}
         renderItem={renderItem}

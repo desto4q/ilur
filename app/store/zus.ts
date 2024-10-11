@@ -49,4 +49,6 @@ const useSelectedStore = create<SelectStore>(set => ({
 const selectModeAtom = atom(false);
 const tempItems = observable<{items: AssetItem[]}>({items: []});
 let selectState$ = observable(false);
-export {useIndexStore, tempItems, useSelectedStore, selectModeAtom,selectState$};
+
+let dumm = false
+export {useIndexStore, tempItems, useSelectedStore, selectModeAtom,selectState$,dumm};

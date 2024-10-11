@@ -1,5 +1,5 @@
 import {View, Text, Dimensions, Image} from 'react-native';
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import {getCollections, getSingle} from '../../api/galleryMethods';
 import {FlashList} from '@shopify/flash-list';
@@ -8,6 +8,8 @@ import {tw} from '../../utils/utils';
 import CollectionCard from '../../components/CollectionCard';
 import {RefreshControl} from 'react-native-gesture-handler';
 import MainHeader from '../../components/MainHeader';
+import {useSharedRef} from '../../Context/SharedRefContext';
+import {useFocusEffect} from '@react-navigation/native';
 let dmen = Dimensions.get('window');
 
 let renderItem = ({item}: {item: MediaLibrary.Album}) => {
@@ -19,6 +21,8 @@ export default function TabCollection() {
     queryFn: async () => await getCollections(),
   });
 
+  let sharedVarRef = useSharedRef();
+  
   return (
     <View style={{flex: 1}}>
       <MainHeader title="Collections" />

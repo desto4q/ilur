@@ -28,7 +28,7 @@ export default function FavoritesScreen() {
     return ({item, index}: {item: AssetItem; index: number}) => {
       return <CollectionMasonCard index={index} item={item} data={data} />;
     };
-  }, [data,selectedItems]);
+  }, [data, selectedItems]);
   return (
     <View style={tw('flex-1')}>
       {/* <MainHeader title={params.key} /> */}
